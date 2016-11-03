@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  00 hours and 00 minutes.
+/* Time spent on a6:  00 hours and 20 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -71,15 +71,28 @@ public class Heap<V> {
         // so calling it will have no effect (yet). The first tests of add, using
         // test00Add, ensure that this method maintains fields c and map properly,
         // without worrying about bubbling up. Look at the spec of test00Add.
+
     	for (Entry k : c) {
     		if (k.value == v) {
     			throw new IllegalArgumentException();
     		}
     	}
+    	//find first empty index in c
+    	int index = 0;
+    	for(int count = 0; count < c.length; count++) {
+    		if (c[count] == null) {
+    			index = count;
+    			break;
+    		}
+    	}
 
-    	
+    	Entry adder = new Entry(v, p);
+
+    	map.put(v, (int)p);
+
+    	c[index] = adder;
+    	this.bubbleUp(index);
     }
-
 
     /** If size = length of c, double the length of array c. */
     public void ensureSpace() {
