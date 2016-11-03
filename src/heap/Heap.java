@@ -72,26 +72,27 @@ public class Heap<V> {
         // test00Add, ensure that this method maintains fields c and map properly,
         // without worrying about bubbling up. Look at the spec of test00Add.
 
-    	for (Entry k : c) {
-    		if (k.value == v) {
-    			throw new IllegalArgumentException();
-    		}
-    	}
-    	//find first empty index in c
-    	int index = 0;
-    	for(int count = 0; count < c.length; count++) {
-    		if (c[count] == null) {
-    			index = count;
-    			break;
-    		}
-    	}
-
     	Entry adder = new Entry(v, p);
 
-    	map.put(v, (int)p);
+    	if (size == 0) {
+    		c[0] = adder;
+    		size +=1;
+    		map.put(v, 0);
+    	}
+    	else if (size > 0){
 
-    	c[index] = adder;
-    	this.bubbleUp(index);
+            //for (Entry k : c) {
+         		//if (k.value == v) {
+           			//throw new IllegalArgumentException();
+            	//}
+            //}
+    		
+    		
+        	c[size] = adder;
+        	this.bubbleUp(size-1);
+        	map.put(v, size);
+        	size +=1;
+    	}
     }
 
     /** If size = length of c, double the length of array c. */
