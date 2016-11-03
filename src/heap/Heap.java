@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  00 hours and 20 minutes.
+/* Time spent on a6:  01 hours and 00 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -81,13 +81,13 @@ public class Heap<V> {
     	}
     	else if (size > 0){
 
-            //for (Entry k : c) {
-         		//if (k.value == v) {
-           			//throw new IllegalArgumentException();
-            	//}
-            //}
+            for (int k = 0; k < size; k++) {
+         		if (c[k].value == v) {
+           			throw new IllegalArgumentException();
+            	}
+            }
     		
-    		
+    		this.ensureSpace();
         	c[size] = adder;
         	this.bubbleUp(size-1);
         	map.put(v, size);
@@ -101,7 +101,13 @@ public class Heap<V> {
         // this method first. If you write this method correctly AND method
         // add calls this method appropriately, testing procedure
         // test10ensureSpace will not find errors.
-
+    	if(size == c.length) {
+    		Entry[] d = createEntryArray(c.length *2);
+    		for (int k = 0; k < size; k++) {
+    			d[k] = c[k]; //could we make use of 'clone' method on d here?
+    		}
+    		c = d;
+    	}
     }
 
     /** Return the number of values in this heap.
