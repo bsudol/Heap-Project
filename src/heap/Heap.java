@@ -86,7 +86,6 @@ public class Heap<V> {
            			throw new IllegalArgumentException();
             	}
             }
-    		
     		this.ensureSpace();
         	c[size] = adder;
         	this.bubbleUp(size-1);
@@ -126,6 +125,15 @@ public class Heap<V> {
         // procedure test13Add_Swap --it will find no errors if you write
         // this method properly.
 
+	    	int i = map.get(c[h].value);
+	    	int j = map.get(c[k].value);
+	    	map.put(c[k].value, i);
+	    	map.put(c[h].value, j);
+	    	
+	    	//now swap them in c
+	    	Entry swapper = c[h];
+	    	c[h] = c[k];
+	    	c[k] = swapper;
     }
 
     /** Bubble c[k] up in heap to its right place.
