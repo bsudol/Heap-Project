@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  01 hours and 00 minutes.
+/* Time spent on a6:  01 hours and 15 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -124,7 +124,8 @@ public class Heap<V> {
         // use method swap for this. Method swap is tested by testing
         // procedure test13Add_Swap --it will find no errors if you write
         // this method properly.
-
+    		
+    		//swap the values in the map first
 	    	int i = map.get(c[h].value);
 	    	int j = map.get(c[k].value);
 	    	map.put(c[k].value, i);
@@ -145,7 +146,19 @@ public class Heap<V> {
         // Do not use recursion. Use iteration.
         // If this method is written properly, testing procedure
         // test15Add_BubbleUp() will not find any errors.
+    	
+    	int priority = (int)c[k].priority;	//do we want this as an int? why is it a double?
+    	//switch it to where it needs to be first
+		Entry placeholder = c[priority];
+		c[priority] = c[k];
 
+		//loop through the rest of c, switching each one a spot up 
+    	for (int count = priority + 1; count < size; count+=2) {
+    		Entry placeholder2 = c[count];
+    		c[count] = placeholder;
+    		placeholder = c[count+1];
+    		c[count+1] = placeholder2;
+    	}
 
     }
 
