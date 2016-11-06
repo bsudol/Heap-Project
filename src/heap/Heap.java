@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  01 hours and 15 minutes.
+/* Time spent on a6:  02 hours and 00 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -101,9 +101,9 @@ public class Heap<V> {
         // add calls this method appropriately, testing procedure
         // test10ensureSpace will not find errors.
     	if(size == c.length) {
-    		Entry[] d = createEntryArray(c.length *2);
+    		Entry[] d = createEntryArray((size *2));
     		for (int k = 0; k < size; k++) {
-    			d[k] = c[k]; //could we make use of 'clone' method on d here?
+    			d[k] = c[k];
     		}
     		c = d;
     	}
@@ -147,19 +147,16 @@ public class Heap<V> {
         // If this method is written properly, testing procedure
         // test15Add_BubbleUp() will not find any errors.
     	
-    	int priority = (int)c[k].priority;	//do we want this as an int? why is it a double?
-    	//switch it to where it needs to be first
-		Entry placeholder = c[priority];
-		c[priority] = c[k];
-
-		//loop through the rest of c, switching each one a spot up 
-    	for (int count = priority + 1; count < size; count+=2) {
-    		Entry placeholder2 = c[count];
-    		c[count] = placeholder;
-    		placeholder = c[count+1];
-    		c[count+1] = placeholder2;
+    	double priority = c[k].priority;
+    	assert (k >= 0 && k < size);
+    	
+    	
+    	
+        for(int count = k; count >= 0; count--) {
+        	if(c[count].priority < priority) {
+            	this.swap(count, count +1);
+        	}
     	}
-
     }
 
     /** Return the value of this heap with lowest priority. Do not
@@ -169,7 +166,7 @@ public class Heap<V> {
         // TODO 5: Do peek. This is an easy one.
         //         test20Peek() will not find errors if this is correct.
 
-        throw new UnsupportedOperationException();
+        return c[size-1].value; //this should work once bubbleup works
     }
 
     /** Remove and return the element of this heap with lowest priority.
