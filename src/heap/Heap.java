@@ -159,16 +159,16 @@ public class Heap<V> {
     	}
     }
 
-
     /** Return the value of this heap with lowest priority. Do not
      *  change the heap. This operation takes constant time.
      *  Throw a NoSuchElementException if the heap is empty. */
     public V peek() {
         // TODO 5: Do peek. This is an easy one.
         //         test20Peek() will not find errors if this is correct.
+
     	if (size == 0) throw new NoSuchElementException();
 
-        return c[size-1].value; //this should work once bubbleup works
+        return c[size-1].value; //this should work once bubbleup and down work
     }
 
     /** Remove and return the element of this heap with lowest priority.
@@ -203,8 +203,8 @@ public class Heap<V> {
         // TODO 7: Do poll (#6) and bubbleDown together. We also suggest
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
-
-    	while (c[k].priority > c[smallerChildOf(k)].priority) {
+    	
+    	while ((smallerChildOf(k) != -1) && (c[k].priority > c[smallerChildOf(k)].priority)) {
     		swap(k, smallerChildOf(k));
     	}
     }
@@ -214,12 +214,16 @@ public class Heap<V> {
      *  Precondition: left child exists: 2n+1 < size of heap */
      int smallerChildOf(int n) {
     	 //c[2i+1] and c[2i+2] are the left and right children of c[i].
-    	 int left = 2*n+1;
-    	 int right = 2*n+2;
-    	 if (c[left].priority == c[right].priority) return right;
-
-    	 return (c[left].priority < c[right].priority ? left : right);
     	 
+    	 if (2*n+2 >= size) return -1;
+    	 if (2*n+2 < size) {
+	    	 int left = (2*n)+1;
+	    	 int right = (2*n)+2;
+	    	 if (c[left].priority == c[right].priority) return right;
+	
+	    	 return (c[left].priority < c[right].priority ? left : right);
+    	 }
+    	 return -1;
     }
 
     /** Change the priority of value v to p.
