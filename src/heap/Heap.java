@@ -88,8 +88,8 @@ public class Heap<V> {
             }
     		this.ensureSpace();
         	c[size] = adder;
-        	this.bubbleUp(size);
         	map.put(v, size);
+        	this.bubbleUp(size);
         	size +=1;
     	}
     }
