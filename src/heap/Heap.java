@@ -224,6 +224,22 @@ public class Heap<V> {
         // TODO  8: When this method is correctly implemented, testing procedure
         //          test50ChangePriority() won't find errors.
 
+    	boolean found = false;
+        for (int k = 0; k < size; k++) {
+     		if (c[k].value == v) {
+     			if(c[k].priority < p) { //increasing priority = bubbleup
+	       			c[k].priority = p;
+	       			found = true;
+	       			this.bubbleUp(k);
+     			}
+     			else{ //decreasing priority = bubbledown
+     				c[k].priority = p;
+           			found = true;
+           			this.bubbleDown(k);
+     			}
+        	}
+        }
+        if (found == false) throw new IllegalArgumentException("v is not in heap");
     }
 
     /** Create and return an Entry[] of size n.
