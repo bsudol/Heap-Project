@@ -88,7 +88,7 @@ public class Heap<V> {
             }
     		this.ensureSpace();
         	c[size] = adder;
-        	this.bubbleUp(size-1);
+        	this.bubbleUp(size);
         	map.put(v, size);
         	size +=1;
     	}
@@ -147,17 +147,18 @@ public class Heap<V> {
         // If this method is written properly, testing procedure
         // test15Add_BubbleUp() will not find any errors.
     	
-    	double priority = c[k].priority;
-    	assert (k >= 0 && k < size);
-    	
-    	
-    	
-        for(int count = k; count >= 0; count--) {
-        	if(c[count].priority < priority) {
-            	this.swap(count, count +1);
-        	}
+    	int i = (k - 1) / 2;
+    	if (c[k].priority <= c[i].priority) {
+	    	while ((c[i].priority > c[k].priority) && k > 0 ) {
+	    		//System.out.println("" + c[i].priority +" " +c[k].priority);
+	    		swap(i,k);
+	    		//System.out.println("" + c[i].priority +" " +c[k].priority);
+	    		k = i;
+	    		i = (i - 1) / 2;
+	    	}
     	}
     }
+
 
     /** Return the value of this heap with lowest priority. Do not
      *  change the heap. This operation takes constant time.
@@ -165,6 +166,7 @@ public class Heap<V> {
     public V peek() {
         // TODO 5: Do peek. This is an easy one.
         //         test20Peek() will not find errors if this is correct.
+    	if (size == 0) throw new NoSuchElementException();
 
         return c[size-1].value; //this should work once bubbleup works
     }
@@ -182,7 +184,13 @@ public class Heap<V> {
         //         This method tests to make sure that when bubbling up or down,
         //         two values with the same priority are not swapped.
 
-        throw new UnsupportedOperationException();
+    	V v = peek();
+    	bubbleDown(map.get(v));
+    	map.remove(v);
+    	c[map.get(v)] = null;
+    	size--;
+    	return v;
+    	
     }
 
     /** Bubble c[k] down in heap until it finds the right place.
@@ -196,7 +204,9 @@ public class Heap<V> {
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
 
-
+    	while (c[k].priority > c[smallerChildOf(k)].priority) {
+    		swap(k, smallerChildOf(k));
+    	}
     }
 
     /** Return the index of the smaller child of c[n]
