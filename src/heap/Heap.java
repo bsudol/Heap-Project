@@ -168,7 +168,20 @@ public class Heap<V> {
 
     	if (size == 0) throw new NoSuchElementException();
 
-        return c[size-1].value; //this should work once bubbleup and down work
+    	//we're going to assume the heap can have priorities out of order
+    	//based on the test20Peek
+    	
+    	double priority = c[0].priority;
+    	V v = c[0].value;
+
+        for (int k = 0; k < size; k++) {
+     		if (c[k].priority < priority) {
+       			v = c[k].value;
+        	}
+        }
+        
+        return v;
+
     }
 
     /** Remove and return the element of this heap with lowest priority.
@@ -183,14 +196,7 @@ public class Heap<V> {
         //         Note also testing procedure test40testDuplicatePriorities
         //         This method tests to make sure that when bubbling up or down,
         //         two values with the same priority are not swapped.
-
-    	V v = peek();
-    	bubbleDown(map.get(v));
-    	map.remove(v);
-    	c[map.get(v)] = null;
-    	size--;
-    	return v;
-    	
+    	return null;
     }
 
     /** Bubble c[k] down in heap until it finds the right place.
@@ -204,9 +210,6 @@ public class Heap<V> {
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
     	
-    	while ((smallerChildOf(k) != -1) && (c[k].priority > c[smallerChildOf(k)].priority)) {
-    		swap(k, smallerChildOf(k));
-    	}
     }
 
     /** Return the index of the smaller child of c[n]
@@ -214,16 +217,12 @@ public class Heap<V> {
      *  Precondition: left child exists: 2n+1 < size of heap */
      int smallerChildOf(int n) {
     	 //c[2i+1] and c[2i+2] are the left and right children of c[i].
-    	 
-    	 if (2*n+2 >= size) return -1;
-    	 if (2*n+2 < size) {
-	    	 int left = (2*n)+1;
-	    	 int right = (2*n)+2;
-	    	 if (c[left].priority == c[right].priority) return right;
-	
-	    	 return (c[left].priority < c[right].priority ? left : right);
-    	 }
-    	 return -1;
+    	 int left = (2*n)+1;
+    	 int right = (2*n)+2;
+    	 if(right >= size) return left; //if there is only a left child
+		 if (c[left].priority == c[right].priority) return right;
+		 
+	     return (c[left].priority < c[right].priority ? left : right);
     }
 
     /** Change the priority of value v to p.
