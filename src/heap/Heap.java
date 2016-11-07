@@ -213,7 +213,13 @@ public class Heap<V> {
      *  If the two children have the same priority, choose the right one.
      *  Precondition: left child exists: 2n+1 < size of heap */
      int smallerChildOf(int n) {
-         throw new UnsupportedOperationException();
+    	 //c[2i+1] and c[2i+2] are the left and right children of c[i].
+    	 int left = 2*n+1;
+    	 int right = 2*n+2;
+    	 if (c[left].priority == c[right].priority) return right;
+
+    	 return (c[left].priority < c[right].priority ? left : right);
+    	 
     }
 
     /** Change the priority of value v to p.
@@ -223,23 +229,18 @@ public class Heap<V> {
     public void changePriority(V v, double p) {
         // TODO  8: When this method is correctly implemented, testing procedure
         //          test50ChangePriority() won't find errors.
-
-    	boolean found = false;
-        for (int k = 0; k < size; k++) {
-     		if (c[k].value == v) {
-     			if(c[k].priority < p) { //increasing priority = bubbleup
-	       			c[k].priority = p;
-	       			found = true;
-	       			this.bubbleUp(k);
-     			}
-     			else{ //decreasing priority = bubbledown
-     				c[k].priority = p;
-           			found = true;
-           			this.bubbleDown(k);
-     			}
-        	}
-        }
-        if (found == false) throw new IllegalArgumentException("v is not in heap");
+    	
+    	int a = map.get(v);
+    	if (a == -1) throw new IllegalArgumentException("v is not in heap");
+    	
+     		if(c[a].priority < p) { //increasing priority = bubbleup
+	       		c[a].priority = p;
+	       		this.bubbleUp(a);
+     		}
+     		else{ //decreasing priority = bubbledown
+     			c[a].priority = p;
+           		this.bubbleDown(a);
+     		}
     }
 
     /** Create and return an Entry[] of size n.
