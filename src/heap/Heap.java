@@ -150,9 +150,7 @@ public class Heap<V> {
     	int i = (k - 1) / 2;
     	if (c[k].priority <= c[i].priority) {
 	    	while ((c[i].priority > c[k].priority) && k > 0 ) {
-	    		//System.out.println("" + c[i].priority +" " +c[k].priority);
 	    		swap(i,k);
-	    		//System.out.println("" + c[i].priority +" " +c[k].priority);
 	    		k = i;
 	    		i = (i - 1) / 2;
 	    	}
@@ -179,7 +177,7 @@ public class Heap<V> {
        			v = c[k].value;
         	}
         }
-        
+        //easier way would be return c[size-1].value; but that isnt passing tests 
         return v;
 
     }
@@ -196,7 +194,13 @@ public class Heap<V> {
         //         Note also testing procedure test40testDuplicatePriorities
         //         This method tests to make sure that when bubbling up or down,
         //         two values with the same priority are not swapped.
-    	return null;
+
+    	V v = peek();
+    	bubbleDown(map.get(v));
+    	map.remove(v);
+    	c[map.get(v)] = null;
+    	size--;
+    	return v;
     }
 
     /** Bubble c[k] down in heap until it finds the right place.
@@ -209,7 +213,12 @@ public class Heap<V> {
         // TODO 7: Do poll (#6) and bubbleDown together. We also suggest
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
-    	
+    	if (((2*k) + 1) <  size){
+        	while ((c[k].priority < c[(2*k)+1].priority)||(c[k].priority < c[(2*k)+2].priority)) {
+        		swap(k, smallerChildOf(k));
+        		k = smallerChildOf(k);
+        	}
+    	}
     }
 
     /** Return the index of the smaller child of c[n]
