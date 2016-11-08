@@ -55,6 +55,11 @@ public class HeapTester {
         for (int k= 0; k < b.length; k= k+1) {s.add(k);}
         ArrayList<Integer> mhS= new ArrayList<Integer>();
         for (int k= 0; k < b.length; k= k+1) {mhS.add(mh.map.get(b[k]));}
+        if (!s.equals(mhS)) {
+        	System.out.println(s);
+        	System.out.println(mhS);
+        	System.out.println("a");
+        }
         assertEquals(s, mhS);
     }
 

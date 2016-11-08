@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  02 hours and 00 minutes.
+/* Time spent on a6:  03 hours and 30 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -169,16 +169,7 @@ public class Heap<V> {
     	//we're going to assume the heap can have priorities out of order
     	//based on the test20Peek
     	
-    	double priority = c[0].priority;
-    	V v = c[0].value;
-
-        for (int k = 0; k < size; k++) {
-     		if (c[k].priority < priority) {
-       			v = c[k].value;
-        	}
-        }
-        //easier way would be return c[size-1].value; but that isnt passing tests 
-        return v;
+    	return c[0].value;
 
     }
 
@@ -194,12 +185,14 @@ public class Heap<V> {
         //         Note also testing procedure test40testDuplicatePriorities
         //         This method tests to make sure that when bubbling up or down,
         //         two values with the same priority are not swapped.
-
+    	
+    	if (size == 0) throw new  NoSuchElementException();
     	V v = peek();
-    	bubbleDown(map.get(v));
-    	map.remove(v);
-    	c[map.get(v)] = null;
     	size--;
+    	c[0] = c[size];
+    	map.put(c[size].value, 0);
+    	bubbleDown(0);
+    	map.remove(v, 0);
     	return v;
     }
 
@@ -213,25 +206,33 @@ public class Heap<V> {
         // TODO 7: Do poll (#6) and bubbleDown together. We also suggest
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
-    	if (((2*k) + 1) <  size){
-        	while ((c[k].priority < c[(2*k)+1].priority)||(c[k].priority < c[(2*k)+2].priority)) {
-        		swap(k, smallerChildOf(k));
-        		k = smallerChildOf(k);
-        	}
+    	
+    	if (size == 2) {
+    		if (c[0].priority < c[1].priority) swap(0, 1);
     	}
-    }
+    	else {
+	    	while ((smallerChildOf(k) >= 0) && c[k].priority > c[smallerChildOf(k)].priority) {
+	    		swap(k, smallerChildOf(k));
+	    		k = smallerChildOf(k);
+	    	}
+    	}
+   }
 
     /** Return the index of the smaller child of c[n]
      *  If the two children have the same priority, choose the right one.
      *  Precondition: left child exists: 2n+1 < size of heap */
      int smallerChildOf(int n) {
     	 //c[2i+1] and c[2i+2] are the left and right children of c[i].
-    	 int left = (2*n)+1;
-    	 int right = (2*n)+2;
-    	 if(right >= size) return left; //if there is only a left child
-		 if (c[left].priority == c[right].priority) return right;
-		 
-	     return (c[left].priority < c[right].priority ? left : right);
+    	 if((2*n + 2) >= size) return -1;
+    	 if((2*n+2) < size) {
+	    	 int left = (2*n)+1;
+	    	 int right = (2*n)+2;
+	    	 if(right >= size) return left; //if there is only a left child
+			 if (c[left].priority == c[right].priority) return right;
+			 
+		     return (c[left].priority < c[right].priority ? left : right);
+    	 }
+    	 return -1;
     }
 
     /** Change the priority of value v to p.
