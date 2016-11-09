@@ -1,5 +1,5 @@
 package heap;
-/* Time spent on a6:  03 hours and 30 minutes.
+/* Time spent on a6:  04 hours and 30 minutes.
 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
@@ -194,6 +194,7 @@ public class Heap<V> {
     	bubbleDown(0);
     	map.remove(v, 0);
     	
+    	//re-orders anything not in order anymore.
     	for(int k = 0; k < size; k++) {
     		bubbleUp(k);
     		bubbleDown(k);
@@ -253,8 +254,8 @@ public class Heap<V> {
     	if (a == -1) throw new IllegalArgumentException("v is not in heap");
     	
 	    c[a].priority = p;
-        this.bubbleDown(a);
-	    this.bubbleUp(a);
+	    bubbleUp(a);
+	    bubbleDown(a);
     }
 
     /** Create and return an Entry[] of size n.
