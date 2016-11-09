@@ -193,6 +193,12 @@ public class Heap<V> {
     	map.put(c[size].value, 0);
     	bubbleDown(0);
     	map.remove(v, 0);
+    	
+    	for(int k = 0; k < size; k++) {
+    		bubbleUp(k);
+    		bubbleDown(k);
+    	}
+    	
     	return v;
     }
 
@@ -208,12 +214,12 @@ public class Heap<V> {
         //         have to. Do not use recursion. Use iteration.
     	
     	if (size == 2) {
-    		if (c[0].priority < c[1].priority) swap(0, 1);
+    		if (c[0].priority > c[1].priority) swap(0, 1);
     	}
     	else {
 	    	while ((smallerChildOf(k) >= 0) && c[k].priority > c[smallerChildOf(k)].priority) {
 	    		swap(k, smallerChildOf(k));
-	    		k = smallerChildOf(k);
+	    		k = smallerChildOf(k); //resets the index to go down more.
 	    	}
     	}
    }
@@ -246,14 +252,9 @@ public class Heap<V> {
     	int a = map.get(v);
     	if (a == -1) throw new IllegalArgumentException("v is not in heap");
     	
-     		if(c[a].priority < p) { //increasing priority = bubbleup
-	       		c[a].priority = p;
-	       		this.bubbleUp(a);
-     		}
-     		else{ //decreasing priority = bubbledown
-     			c[a].priority = p;
-           		this.bubbleDown(a);
-     		}
+	    c[a].priority = p;
+        this.bubbleDown(a);
+	    this.bubbleUp(a);
     }
 
     /** Create and return an Entry[] of size n.
