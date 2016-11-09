@@ -165,9 +165,6 @@ public class Heap<V> {
         //         test20Peek() will not find errors if this is correct.
 
     	if (size == 0) throw new NoSuchElementException();
-
-    	//we're going to assume the heap can have priorities out of order
-    	//based on the test20Peek
     	
     	return c[0].value;
 
@@ -186,21 +183,19 @@ public class Heap<V> {
         //         This method tests to make sure that when bubbling up or down,
         //         two values with the same priority are not swapped.
     	
-    	if (size == 0) throw new  NoSuchElementException();
-    	V v = peek();
+    	if (size == 0) throw new NoSuchElementException();
+
+    	V v= peek();
+    	swap(0, size-1);
+    	map.remove(c[size-1].value);
+    	c[size-1]= null;
+    	
     	size--;
-    	c[0] = c[size];
-    	map.put(c[size].value, 0);
+    	if (size == 0) return v;
     	bubbleDown(0);
-    	map.remove(v, 0);
-    	
-    	//re-orders anything not in order anymore.
-    	for(int k = 0; k < size; k++) {
-    		bubbleUp(k);
-    		bubbleDown(k);
-    	}
-    	
     	return v;
+
+
     }
 
     /** Bubble c[k] down in heap until it finds the right place.
@@ -213,17 +208,17 @@ public class Heap<V> {
         // TODO 7: Do poll (#6) and bubbleDown together. We also suggest
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
-    	
+    	if (size == 1) return;
     	if (size == 2) {
     		if (c[0].priority > c[1].priority) swap(0, 1);
     	}
-    	else {
-	    	while ((smallerChildOf(k) >= 0) && c[k].priority > c[smallerChildOf(k)].priority) {
-	    		swap(k, smallerChildOf(k));
-	    		k = smallerChildOf(k); //resets the index to go down more.
-	    	}
-    	}
-   }
+    	int child = smallerChildOf(k);
+	    while ((child >= 0) && c[k].priority > c[child].priority) {
+	    		swap(k, child);
+	    		k = child; //resets the index to go down more.
+	    }
+    }
+
 
     /** Return the index of the smaller child of c[n]
      *  If the two children have the same priority, choose the right one.
@@ -252,7 +247,7 @@ public class Heap<V> {
     	
     	int a = map.get(v);
     	if (a == -1) throw new IllegalArgumentException("v is not in heap");
-    	
+        
 	    c[a].priority = p;
 	    bubbleUp(a);
 	    bubbleDown(a);
