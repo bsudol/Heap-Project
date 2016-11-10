@@ -1,10 +1,9 @@
 package heap;
 /* Time spent on a6:  04 hours and 30 minutes.
-
+ * 
  * Name(s): Basia Sudol and Drew Mera
  * Netid(s): bas334, dnm54
  * What I thought about this assignment:
- *
  */
 
 import java.lang.reflect.Array;
@@ -189,9 +188,7 @@ public class Heap<V> {
     	swap(0, size-1);
     	map.remove(c[size-1].value);
     	c[size-1]= null;
-    	
     	size--;
-    	if (size == 0) return v;
     	bubbleDown(0);
     	return v;
 
@@ -229,7 +226,9 @@ public class Heap<V> {
     	 if((2*n+2) < size) {
 	    	 int left = (2*n)+1;
 	    	 int right = (2*n)+2;
+	    	 
 	    	 if(right >= size) return left; //if there is only a left child
+	    	 
 			 if (c[left].priority == c[right].priority) return right;
 			 
 		     return (c[left].priority < c[right].priority ? left : right);
