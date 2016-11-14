@@ -185,13 +185,12 @@ public class Heap<V> {
     	if (size == 0) throw new NoSuchElementException();
 
     	V v= peek();
-    	swap(0, size-1);
-    	map.remove(c[size-1].value);
-    	c[size-1]= null;
-    	size--;
-    	bubbleDown(0);
-    	return v;
-
+		size--;
+    	swap(0, size);
+		c[size]= null;
+    	map.remove(v);
+    	if (size > 0) bubbleDown(0);
+		return v;
 
     }
 
@@ -205,15 +204,17 @@ public class Heap<V> {
         // TODO 7: Do poll (#6) and bubbleDown together. We also suggest
         //         implementing and using smallerChildOf, though you don't
         //         have to. Do not use recursion. Use iteration.
-    	if (size == 1) return;
-    	if (size == 2) {
-    		if (c[0].priority > c[1].priority) swap(0, 1);
-    	}
     	int child = smallerChildOf(k);
-	    while ((child >= 0) && c[k].priority > c[child].priority) {
-	    		swap(k, child);
-	    		k = child; //resets the index to go down more.
-	    }
+    	if (size == 1 || c[child] == null) return;
+    	
+    	//opposite of bubbleUp()
+    	while (c[k].priority > c[child].priority) {
+    		if (c[child] == null) break;	//to avoid null pointers
+    		swap(k, child);
+    		k = child;
+    		if (2*k+1 >= size) break;	//to avoid null pointers
+    		child = smallerChildOf(k);
+    	}
     }
 
 
@@ -222,18 +223,15 @@ public class Heap<V> {
      *  Precondition: left child exists: 2n+1 < size of heap */
      int smallerChildOf(int n) {
     	 //c[2i+1] and c[2i+2] are the left and right children of c[i].
-    	 if((2*n + 2) >= size) return -1;
-    	 if((2*n+2) < size) {
-	    	 int left = (2*n)+1;
-	    	 int right = (2*n)+2;
+    	 int left = (2*n)+1;
+    	 int right = (2*n)+2;
+		 
+	   	 if(right >= size) return left; //if there is only a left child
 	    	 
-	    	 if(right >= size) return left; //if there is only a left child
-	    	 
-			 if (c[left].priority == c[right].priority) return right;
-			 
-		     return (c[left].priority < c[right].priority ? left : right);
-    	 }
-    	 return -1;
+ 		 if (c[left].priority == c[right].priority) return right;
+		 
+	     return (c[left].priority < c[right].priority ? left : right);
+
     }
 
     /** Change the priority of value v to p.
@@ -244,12 +242,16 @@ public class Heap<V> {
         // TODO  8: When this method is correctly implemented, testing procedure
         //          test50ChangePriority() won't find errors.
     	
-    	int a = map.get(v);
-    	if (a == -1) throw new IllegalArgumentException("v is not in heap");
-        
-	    c[a].priority = p;
-	    bubbleUp(a);
-	    bubbleDown(a);
+    	if (!map.containsKey(v)) throw new IllegalArgumentException();
+    	int i = map.get(v);
+    	Entry e = c[i];
+    	//get the old priority and change it
+    	double oldP = e.priority;
+    	e.priority = p;
+    	
+    	//bubble according to the change in priority
+    	if (oldP < p) bubbleDown(i);
+    	else if (oldP > p) bubbleUp(i);
     }
 
     /** Create and return an Entry[] of size n.
